@@ -10,6 +10,7 @@ cargarDiccionario(info_impresiones)
 agregar170(info_impresiones)
 agregar184(info_impresiones)
 agregar180(info_impresiones)
+agregar133(info_impresiones)
 
 print(info_impresiones)
 

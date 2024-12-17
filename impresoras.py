@@ -3,7 +3,7 @@ import re
 import requests
 
 def cargarDiccionario(info_impresiones):
-    impresoras = [170,172,173,175,176,177,178,179,180,181,182,184]
+    impresoras = [170,172,173,175,176,177,178,179,180,181,182,184,133]
 
     for impresora in impresoras:
         try:
@@ -50,7 +50,10 @@ def agregar184(diccionario):
 
 def agregar133(diccionario):
     data = LlamarURL('http://10.0.0.133/cgi-bin/dynamic/printer/config/reports/deviceinfo.html')
-    p_computo = data.find('p', text = 'Cómputo de pág.')
-    p_value = p_computo.find_next('p')
-    value = p_value.text.strip().replace('=', '').strip()
+    p_computo = data.find('tr')
+    print(p_computo)
+    p_value = p_computo.find_next('tr').find_next('td').find_next('td').find_next('p')
+    value = p_value.text.strip().replace('=','').strip()
     diccionario[133] = int(value)
+
+    
