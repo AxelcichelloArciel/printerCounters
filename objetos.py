@@ -1,4 +1,5 @@
 import openpyxl as op
+from datetime import datetime
 class Excel():
     
     def __init__(self, ruta):
@@ -11,14 +12,44 @@ class Excel():
     def borrar_col(self, colum):
         self.sheet.delete_cols(idx=colum)
     
-    def completar_meses(self, celdaVieja, celdaNueva ):
-        meses= ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre']
+    def completar_meses(self, celdaVieja, celdaNueva):
+        meses = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 
+                'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre']
+        
+        n_mes_actual = datetime.now().month  
+
         for index, mes in enumerate(meses):
-            if mes.capitalize()==self.sheet[celdaVieja].value:#N1
-                if mes=="diciembre":
-                    self.sheet[f'{celdaNueva}']=meses[0].capitalize() #O1
-                else:
-                    self.sheet[f'{celdaNueva}']=meses[index+1].capitalize() #O1
+            print(f"Índice: {index}, Mes: {mes}")
+
+            # Compara si el mes actual corresponde al índice + 1
+            if index + 1 == n_mes_actual:  
+                print(f"Mes encontrado: es el {meses[index]}")
+
+                # Actualiza la celdaNueva con el mes actual
+                self.sheet[celdaNueva].value = meses[index]
+
+                # Calcula el siguiente mes
+                n_index = (index - 1) % len(meses)  # Evita desbordamiento en diciembre
+                self.sheet[celdaVieja].value = meses[n_index].capitalize()
+
+                # Sal del bucle una vez asignado
+                break
+
+        
+            
+        
+
+
+
+
+        # for index, mes in enumerate(meses):
+        #     print('index: ', index)
+        #     if mes.capitalize()==self.sheet[celdaVieja].value:#N1
+        #         if mes=="diciembre":
+        #             self.sheet[f'{celdaNueva}']=meses[0].capitalize() #O1
+        #             print('-- dic --')
+        #         else:
+        #             self.sheet[f'{celdaNueva}']=meses[index+1].capitalize() #O1
     
     def completar_computo(self, computo):
         for index, num in enumerate(computo):

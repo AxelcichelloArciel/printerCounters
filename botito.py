@@ -16,8 +16,7 @@ def modif(computos):
     excel.completar_computo(computos)
     
 
-
-
+   
 
 
     excel.seleccionar_hoja('Computos Mensuales')
