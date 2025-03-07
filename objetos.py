@@ -28,9 +28,12 @@ class Excel():
                 # Actualiza la celdaNueva con el mes actual
                 self.sheet[celdaNueva].value = meses[index]
 
-                # Calcula el siguiente mes
+                # Calcula el mes anterior
                 n_index = (index - 1) % len(meses)  # Evita desbordamiento en diciembre
-                self.sheet[celdaVieja].value = meses[n_index].capitalize()
+                
+                if self.sheet[celdaVieja].value != '':
+
+                    self.sheet[celdaVieja].value = meses[n_index].capitalize()
 
                 # Sal del bucle una vez asignado
                 break
