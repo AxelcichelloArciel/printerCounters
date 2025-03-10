@@ -50,19 +50,28 @@ class Printer:
                     html_obtenido = pedido_obtenido.text
 
                     soup = BeautifulSoup(html_obtenido, "html.parser")
-                    filas = soup.find_all('tr')
 
-                    for fila in filas:
-                        celdas = fila.find_all('td')
-                        if len(celdas) >= 2:
-                            texto_primera_celda = self.normalizar_texto(celdas[0].get_text())
+                    if self._ip != "184":
+                        filas = soup.find_all('tr')
 
-                            # print(f"🔸 Celda encontrada: {texto_primera_celda}")  # Depuración
+                        for fila in filas:
+                            celdas = fila.find_all('td')
+                            if len(celdas) >= 2:
+                                texto_primera_celda = self.normalizar_texto(celdas[0].get_text())
 
-                            # 🔍 Expresión regular para detectar "Cómputo de pág." con cualquier variación
-                            if re.search(r"c[oó]mputo\s+de\s+p[áa]g|camputo de pag", texto_primera_celda, re.IGNORECASE):
+                                # print(f"🔸 Celda encontrada: {texto_primera_celda}")  # Depuración
 
-                                return self.normalizar_texto(celdas[1].get_text())
+                                # 🔍 Expresión regular para detectar "Cómputo de pág." con cualquier variación
+                                if re.search(r"c[oó]mputo\s+de\s+p[áa]g|camputo de pag", texto_primera_celda, re.IGNORECASE):
+
+                                    return self.normalizar_texto(celdas[1].get_text())
+
+                    elif self._ip == "184":
+                        p_computo = soup.find('td', text=':')
+                        p_value = p_computo.find_next('td')
+                        value = p_value.text
+                        return value
+
 
                 return None
 
