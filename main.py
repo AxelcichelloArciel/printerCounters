@@ -1,4 +1,5 @@
 from Classes.Printer import Printer
+from Classes.ExcelHandler import ExcelHandler
 from database.listadoImpresoras import listado_impresoras
 
 # Lista para almacenar las instancias de las impresoras
@@ -34,10 +35,10 @@ for impresora in listado_impresoras:
 
 
 
+handler = ExcelHandler()
 
-
-
-        
+# Guardar datos en Excel
+handler.save_printers_to_excel(impresoras_list)
 
     
         
