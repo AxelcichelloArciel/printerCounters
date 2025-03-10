@@ -2,6 +2,11 @@ import requests
 import unicodedata
 from bs4 import BeautifulSoup
 import re
+import os
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.wait import WebDriverWait
 
 class Printer:
     def __init__(self, ip, ubicacion, numeroSerie, modelo, urlBase):
@@ -34,33 +39,46 @@ class Printer:
         return texto
 
     def buscarContador(self):
-        try:
-            pedido_obtenido = requests.get(self._urlBase, timeout=5)
-            pedido_obtenido.encoding = 'ISO-8859-1'  # Usamos 'ISO-8859-1' como codificación predeterminada
 
-            if pedido_obtenido.status_code == 200:
-                html_obtenido = pedido_obtenido.text
+        if self._ip != "180" :
 
-                soup = BeautifulSoup(html_obtenido, "html.parser")
-                filas = soup.find_all('tr')
+            try:
+                pedido_obtenido = requests.get(self._urlBase, timeout=5)
+                pedido_obtenido.encoding = 'ISO-8859-1'  # Usamos 'ISO-8859-1' como codificación predeterminada
 
-                for fila in filas:
-                    celdas = fila.find_all('td')
-                    if len(celdas) >= 2:
-                        texto_primera_celda = self.normalizar_texto(celdas[0].get_text())
+                if pedido_obtenido.status_code == 200:
+                    html_obtenido = pedido_obtenido.text
 
-                        # print(f"🔸 Celda encontrada: {texto_primera_celda}")  # Depuración
+                    soup = BeautifulSoup(html_obtenido, "html.parser")
+                    filas = soup.find_all('tr')
 
-                        # 🔍 Expresión regular para detectar "Cómputo de pág." con cualquier variación
-                        if re.search(r"c[oó]mputo\s+de\s+p[áa]g|camputo de pag", texto_primera_celda, re.IGNORECASE):
+                    for fila in filas:
+                        celdas = fila.find_all('td')
+                        if len(celdas) >= 2:
+                            texto_primera_celda = self.normalizar_texto(celdas[0].get_text())
 
-                            return self.normalizar_texto(celdas[1].get_text())
+                            # print(f"🔸 Celda encontrada: {texto_primera_celda}")  # Depuración
 
-            return None
+                            # 🔍 Expresión regular para detectar "Cómputo de pág." con cualquier variación
+                            if re.search(r"c[oó]mputo\s+de\s+p[áa]g|camputo de pag", texto_primera_celda, re.IGNORECASE):
 
-        except requests.RequestException as e:
-            print(f"⚠️ Error al acceder a la impresora en {self._ubicacion} ({self._ip}): {e}")
-            return 0
-        except (AttributeError, ValueError) as e:
-            print(f"⚠️ Error al procesar los datos de la impresora {self._ubicacion} ({self._ip}): {e}")
-            return 0
+                                return self.normalizar_texto(celdas[1].get_text())
+
+                return None
+
+            except requests.RequestException as e:
+                print(f"⚠️ Error al acceder a la impresora en {self._ubicacion} ({self._ip}): {e}")
+                return 0
+            except (AttributeError, ValueError) as e:
+                print(f"⚠️ Error al procesar los datos de la impresora {self._ubicacion} ({self._ip}): {e}")
+                return 0
+
+        else:
+            driver = webdriver.Chrome()
+            driver.get("http://128.110.0.180/#/Settings/Reports/ReportDeviceGroup")
+            pag_contador = WebDriverWait(driver, 15).until(EC.element_to_be_clickable((By.XPATH, "//a[.//span[@data-textid='70528']]")))
+            pag_contador.click()
+            value_e = WebDriverWait(driver, 30).until(EC.presence_of_element_located((By.XPATH, "//*[@id='ReportDeviceStatisticsPopupContents']/div/table[38]/tbody/tr/td[2]")))
+            value = int(value_e.text.strip())
+            return value
+

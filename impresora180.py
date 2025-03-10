@@ -26,6 +26,3 @@ def agregar180(diccionario):
     impresiones = pag_contador()
     driver.quit()
     diccionario[180] = impresiones
- 
-
-
