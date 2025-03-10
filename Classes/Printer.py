@@ -76,9 +76,10 @@ class Printer:
         else:
             driver = webdriver.Chrome()
             driver.get("http://128.110.0.180/#/Settings/Reports/ReportDeviceGroup")
-            pag_contador = WebDriverWait(driver, 15).until(EC.element_to_be_clickable((By.XPATH, "//a[.//span[@data-textid='70528']]")))
+            pag_contador = WebDriverWait(driver, 15).until(
+                EC.element_to_be_clickable((By.XPATH, "//a[.//span[@data-textid='70528']]")))
             pag_contador.click()
-            value_e = WebDriverWait(driver, 30).until(EC.presence_of_element_located((By.XPATH, "//*[@id='ReportDeviceStatisticsPopupContents']/div/table[38]/tbody/tr/td[2]")))
+            value_e = WebDriverWait(driver, 30).until(EC.presence_of_element_located(
+                (By.XPATH, "//*[@id='ReportDeviceStatisticsPopupContents']/div/table[38]/tbody/tr/td[2]")))
             value = int(value_e.text.strip())
             return value
-
