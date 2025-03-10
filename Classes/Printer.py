@@ -16,7 +16,7 @@ class Printer:
         return self._contador
 
     def __str__(self):
-        return f"Printer(ip={self._ip}, ubicacion={self._ubicacion}, numeroSerie={self._numeroSerie}, modelo={self._modelo}, urlBase={self._urlBase}, contador={self._contador})"
+        return f"\nPrinter(ip={self._ip}, ubicacion={self._ubicacion}, numeroSerie={self._numeroSerie}, modelo={self._modelo}, urlBase={self._urlBase}, contador={self._contador})"
 
     def quitar_caracteres_especiales(self, texto):
         """Elimina los caracteres especiales y convierte a minúsculas."""
@@ -49,7 +49,7 @@ class Printer:
                     if len(celdas) >= 2:
                         texto_primera_celda = self.normalizar_texto(celdas[0].get_text())
 
-                        print(f"🔸 Celda encontrada: {texto_primera_celda}")  # Depuración
+                        # print(f"🔸 Celda encontrada: {texto_primera_celda}")  # Depuración
 
                         # 🔍 Expresión regular para detectar "Cómputo de pág." con cualquier variación
                         if re.search(r"c[oó]mputo\s+de\s+p[áa]g|camputo de pag", texto_primera_celda, re.IGNORECASE):
