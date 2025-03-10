@@ -21,22 +21,9 @@ class Printer:
         return self._contador
 
     def __str__(self):
-        return f"\nPrinter(ip={self._ip}, ubicacion={self._ubicacion}, numeroSerie={self._numeroSerie}, modelo={self._modelo}, urlBase={self._urlBase}, contador={self._contador})"
+        return f"Printer(ip={self._ip}, ubicacion={self._ubicacion}, numeroSerie={self._numeroSerie}, modelo={self._modelo}, urlBase={self._urlBase}, contador={self._contador})\n"
 
-    def quitar_caracteres_especiales(self, texto):
-        """Elimina los caracteres especiales y convierte a minúsculas."""
-        # Normalizamos el texto para eliminar los acentos
-        texto = unicodedata.normalize('NFD', texto)
-        texto = ''.join([c for c in texto if unicodedata.category(c) != 'Mn'])  # Eliminamos los acentos
-        # Reemplazamos caracteres no alfabéticos por un espacio
-        texto = re.sub(r'[^a-zA-Z0-9\s]', '', texto)
-        texto = re.sub(r'\s+', ' ', texto).strip()  # Reemplazamos espacios múltiples por uno solo
-        return texto.lower()
 
-    def normalizar_texto(self, texto):
-        """Convierte el texto a formato ASCII y normaliza espacios."""
-        texto = self.quitar_caracteres_especiales(texto)  # Aplica la eliminación de caracteres especiales
-        return texto
 
     def buscarContador(self):
 
@@ -92,3 +79,21 @@ class Printer:
                 (By.XPATH, "//*[@id='ReportDeviceStatisticsPopupContents']/div/table[38]/tbody/tr/td[2]")))
             value = int(value_e.text.strip())
             return value
+
+
+
+
+    def quitar_caracteres_especiales(self, texto):
+        """Elimina los caracteres especiales y convierte a minúsculas."""
+        # Normalizamos el texto para eliminar los acentos
+        texto = unicodedata.normalize('NFD', texto)
+        texto = ''.join([c for c in texto if unicodedata.category(c) != 'Mn'])  # Eliminamos los acentos
+        # Reemplazamos caracteres no alfabéticos por un espacio
+        texto = re.sub(r'[^a-zA-Z0-9\s]', '', texto)
+        texto = re.sub(r'\s+', ' ', texto).strip()  # Reemplazamos espacios múltiples por uno solo
+        return texto.lower()
+
+    def normalizar_texto(self, texto):
+        """Convierte el texto a formato ASCII y normaliza espacios."""
+        texto = self.quitar_caracteres_especiales(texto)  # Aplica la eliminación de caracteres especiales
+        return texto
